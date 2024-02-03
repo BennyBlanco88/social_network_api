@@ -114,8 +114,7 @@ module.exports = {
   },
 };
 
-// Exports
-module.exports = userController;
+
 
  
 

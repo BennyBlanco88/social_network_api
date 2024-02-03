@@ -1,10 +1,10 @@
 const { Thought, User } = require('../models');
 
 module.exports = {
-  async getThoughts(req, res) {
+  async getThought(req, res) {
     try {
-      const thoughts = await Thought.find();
-      res.json(thoughts);
+      const thought = await Thought.find();
+      res.json(thought);
     } catch (err) {
       res.status(500).json(err);
     }
@@ -28,7 +28,7 @@ module.exports = {
       const thought = await Thought.create(req.body);
       const user = await User.findOneAndUpdate(
         { _id: req.body.userId },
-        { $addToSet: { thoughts: thought._id } },
+        { $addToSet: { thought: thought._id } },
         { new: true }
       );
 
