@@ -1,36 +1,35 @@
 const { Schema, model } = require('mongoose');
 const Response = require('./Response');
-const { Thought } = require('.');
 
-// Schema to create Post model
-const thoughtSchema = new Schema(
+
+/// thought schema
+const thoughtSchema = new Schema (
     {
-        published: {
-            type: Boolean,
-            default: false,
-        },
-        createdAt: {
-            type: Date,
-            default: Date.now,
-        },
-        advertiserFriendly: {
-            type: Boolean,
-            default: true,
-        },
-        description: {
-            type: String,
-            minLength: 15,
-            maxLength: 500,
-        },
-        responses: [Response],
+      thoughtText: {
+        type: String,
+        required: true,
+        minlength: 1,
+        maxlength: 280,
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now,
+        get: createdAtVal => moment(createdAtVal).format("MMM DD, YYYY [at] hh:mm a"),
+      },
+      username: {
+        type: String,
+        required: true,
+      },
+      responses: [Response],
     },
     {
         toJSON: {
             virtuals: true,
+            getters: true,
         },
         id: false,
     }
-);
+)
 
 //Create a virtual property `responses` that gets the amout of reponse per thoughts
 thoughtSchema
@@ -41,6 +40,6 @@ thoughtSchema
     });
 
 //Initialize our thought model
-const thought = model('Thought', thoughtSchema);
+const Thought = model('Thought', thoughtSchema);
 
 module.exports = Thought;

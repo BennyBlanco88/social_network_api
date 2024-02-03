@@ -1,42 +1,49 @@
-const { Schema, model } = require('mongoose');
+// Imports
+const { Schema, model } = require("mongoose");
 
-// Schema to create User model
+// User schema
 const userSchema = new Schema(
-    {
-        first: String,
-        last: String,
-        age: Number,
-        videos: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'video',
-            },
-        ],
-
+  {
+    username: {
+      type: String,
+      unique: true,
+      required: true,
+      trim: true,
     },
-    {
-        toJSON: {
-            virtuals: true,
-        },
-        id: false,
-    }
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      match: [/.+@.+\..+/, "Must match an email address!"],
+    },
+    thoughts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "thought",
+      },
+    ],
+    friends: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "user",
+      },
+    ],
+  },
+  {
+    toJSON: {
+      virtuals: true,
+    },
+    id: false,
+  }
 );
 
-//Create a virtual property `fullName` that gets and sets the user's full name
-userSchema
-    .virtual('fullName')
-    //Getter
-    .get(function () {
-        return `${this.first} ${this.last}`;
-    })
-    // Setter to set the first and last name
-    .set(function (v) {
-        const first = v.split(' ')[0];
-        const last = v.split(' ')[1];
-        this.set({ first, last });
-    });
+// Increases friend count in User model object when friends are added by a user
+userSchema.virtual("friendCount").get(function () {
+  return this.friends.length;
+});
 
-// Intialize our User model
-const User = model('user', userSchema);
+// Creates User model with userSchema
+const User = model("user", userSchema);
 
+// Exports
 module.exports = User;
