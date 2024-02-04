@@ -6,18 +6,18 @@ const {
     removeThoughtResponse
 } = require('../../controllers/thoughtController');
 
-// /api/thoughts
+// /api/thought
 router.route('/').get(getThought).post(createThought);
 
-// /api/thoughts/:thoughtsId
+// /api/thought/:thoughtsId
 router
-    .route('/:thoughtsId')
+    .route('/:thoughtId')
     .get(getThought);
 
-// /api/thoughts/:thoughtsId/repsonses
+// /api/thought/:thoughtsId/repsonses
 router.route('/:thoughtId/responses').post(addThoughtResponse);
 
-// /api/thoughts/:thoughtsId/responses/:reponseId
+// /api/thought/:thoughtsId/responses/:reponseId
 router.route('/:thoughtId/responses/:responseId').delete(removeThoughtResponse);
 
 module.exports = router;
